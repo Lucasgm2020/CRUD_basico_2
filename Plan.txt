@@ -1,0 +1,82 @@
+Objetivo.
+
+Crear un CRUD que se conecte a una BBDD. 
+
+
+Tendrá las siguientes funcionalidades:
+
+A) BBDD
+1. Conectarse a la bbdd con una opcion del menu. Eso habilitará los botones de nuevo, editar y eliminar. Mostrará los registros de dicha BBDD.
+La BBDD estará siempre en la misma ubicacion que el archivo .py. Entonces, si la BBDD ya existe y tiene la tabla, mostrará un mensaje que diga que se ha conectado correctamente. Si el archivo existe pero no tiene tabla, mostrará primero un msj de error con el tipo y otro despues por si desea crear la tabla (askyesno).
+2. Eliminar la tabla de la BBDD. Si la tabla existe, muestra que se ha borrado correctamente. Si no existe, muestra un ERROR y el tipo.
+
+B) Botones y habilitaciones
+3. TODOS los botones deben estar deshabilitados al momento de ingresar a la aplicación.
+4. Si se conecta a la BBDD, se habilitan los botones de nuevo, editar y eliminar. Los de cancelar y guardar se habilitan al clickear en "nuevo", los entries siguen deshabilitados.
+5. Si se elimina la tabla de la BBDD, se borran los registros y se deshabilitan todos los botones, tambien los entries.
+
+C) Al conectarse a la BBDD mostrar los registro. Al eliminar la BBDD, borrarlos.
+
+D) Crear registro
+6.
+a. Al clickear en nuevo (BBDD conectada), se habilitan los botones cancelar y guardar, ademas de los entries. Este boton permite generar un nuevo registro.
+b. Al clickear en guardar, debe guardar el registro y actualizar en el treeview. Además, si algun campo está vacío (se comprueba con las variables de StringVar)
+debe confirmar si se añadirá así el registro. Si se pone que no, no lo sube y queda a la espera. 
+Al terminar de guardar, se borran los entries y se deshabilitan.
+c. Al apretar cancelar, se borran los entries y se deshabilitan.
+
+E) Editar registro
+7. El boton editar generar una nueva ventana con el registro anterior (labels y entries deshabilitados para modificar) y entries para poner el entry modificado. La nueva ventana tendrá las opciones: borrar los entries; guardar cambios. Actualiza el treeview.
+
+F) Eliminar registro
+8. El boton eliminar borra el registro y lo actualiza en el treeview.
+
+
+
+PASO A PASO del codigo:
+
+1. Crear apariencia de la aplicacion de escritorio.
+a. Importar libreria tkinter
+b. Crear root, mainloop, frames. 3 frames en total, 1 para labels, entries y los botones; otro para el treeview, y uno mas para los botones de abajo.
+c. Crear el menu con las 4 cascadas.
+d. Crear las labels y entries dentro del primer frame. Igual con los botones. Son 3 columnas, los entries tienen un columnspan de 2. Usar Grid. Guardar los entries en variables.
+
+e. Crear el treeview con las 4 columnas. 
+
+f. Crear los 2 botones inferiores.
+
+2. Crear funciones.
+a. Casos de habilitación de botones:
+    1_Al ingresar a la aplicacion, todos los botones se deshabilitan. 
+    2_Al conectar con la BBDD, se habilitan: "nuevo, editar y eliminar". Si hay un error, no se hace.
+    3_Al eliminar la BBDD, se deshabilitan todos los botones y entries. Si no hay ninguna BBDD conectada, no se hace.
+    4_Al clickear en "nuevo", se habilitan los botones "guardar y cancelar", también los entries.
+    5_Al clickear en "guardar", se deshabilitan los botones "guardar y cancelar", también los entries.
+    6_Al clickear en "cancelar", se deshabilitan los botones "guardar y cancelar", también los entries.
+    7. Al clickear en "editar", se deshabilitan los botones "guardar y cancelar", también los entries.
+    8. Al clickear en "eliminar", se deshabilitan los botones "guardar y cancelar", también los entries.
+
+    Hago 2 funciones, una para deshabilitar (segun sean todos los botones o solo los de "guardar y cancelar") otra para habilitar (segun sean "nuevo, editar y eliminar" o "guardar y cancelar").
+
+b. Funcion para realizar querys a la BBDD.
+
+c. Conexión con BBDD. El archivo .db debe existir en la misma ubicación del archivo .py. Igualmente, se crea si no existe.
+    1_Comprobar si la tabla existe con "SELECT * FROM DATOS". Si existe, mostrar un mensaje que diga que se ha conectado correctamente.
+    2_Si no existe, mostrar un msj de error y luego otro para confirmar si se desea crear una tabla en la BBDD. Crearla segun la respuesta.
+
+d. Mostrar registros en el treeview.  
+
+e. Eliminar BBDD. Borrar la tabla de la bbdd.
+    1_Borrar la tabla de la bbdd. Si existe, mostrar un msj de que se ha borrado correctamente. Borrar los registros y deshabilitar campos y botones.
+    2_Si no existe, mostrar un msj de error.
+
+f. Actualizar registros en treeview. Consultar en BBDD, borrar lo que ya está en el treeview (con un for) y con otro for, insertar los nuevos (insert("",0,text=ID,values=(columnas)))
+
+g. Guardar datos. Hacer la query a la BBDD (update datos set (column1,column2,...) where condition o INSERT into DATOS VALUES) con la información dentro de los entries (variables StringVar). Hay 2 tipos de guardado: para nuevo registro y para editar registro. Creo una variable global para definir cual será el caso (segun se haga click en nuevo o en editar). Luego de guardar, deshabilito los botones y entries y borro lo que esté en estos.
+h. Cancelar. Deshabilito los botones y entries y borro lo que esté en estos.
+i. Editar. Habilito los entries y los campos de guardar y cancelar. Actualizo los StringVar con el contenido del registro seleccionado, guardandolo con tree.focus().
+j. Eliminar. Elimino el registro seleccionado: lo obtengo con tree.focus() y hago la query (DELETE FROM DATOS WHERE CONDITION)
+h. Borrar la BBDD. Borro con la query "DROP TABLE DATOS"
+
+Observaciones:
+Considero todas las excepciones posibles (principalmente al hacer queries o seleccionar datos que no están) y defino una funcion para hacer los mensajes generales de información y de error.
